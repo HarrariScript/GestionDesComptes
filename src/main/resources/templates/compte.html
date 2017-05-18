@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="template1">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Gestion des comptes </title>
+</head>
+<body>
+<div layout:fragment="content1">
+    <div class="row">
+        <!--recherche de client -->
+        <div class="container col s6">
+            <div class="card ">
+                <div class="card-content black-text">
+                    <span class="card-title">information sur le client </span>
+                    <div class="row">
+                        <div class="col s6">
+                            <form th:action="@{consulterClient}" method="get" class="col s12">
+                                <div class="row">
+                                    <div class="input-field ">
+                                        <label for="CodeClient">Code Compte </label>
+                                        <input id="CodeClient" name="CodeClient" type="number" min="1"
+                                               class="validate"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col s6">
+                            <div class="row" th:if="${client}">
+                                <label> Client : </label>
+                                <label th:text="${client.nom}"></label>
+                            </div>
+                            <span class="error" th:text="${error}" th:if="${error}"> </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--les comptes d'un utilisateur-->
+        <div class="container col s6" th:if="${client}">
+            <div class="card ">
+                <div class="card-content black-text">
+                    <span class="card-title">Compte de client </span>
+
+                    <table class="table table-hover">
+                        <thead>
+                        <th>Code Compte</th>
+                        <th>type Compte</th>
+                        <th>date de creation</th>
+                        <th>solde</th>
+                        <th>taux</th>
+                        <th>decouvert</th>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c:${compteList}">
+                            <td th:text="${c.numCompte}"></td>
+                            <td th:text="${c.class.simpleName}"></td>
+                            <td th:text="${c.dateCreation}"></td>
+                            <td th:text="${c.solde}"></td>
+                            <td th:text="${c.taux}" th:if="${(c.class.simpleName).equals('CompteEpargne')}"></td>
+                            <td th:if="${!(c.class.simpleName).equals('CompteEpargne')}"></td>
+                            <td th:text="${c.decouvert}" th:if="${!(c.class.simpleName).equals('CompteEpargne')}"></td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                    <ul class="pagination">
+                        <li th:class="${s.index==pageCourant}?'active':''" th:each="p,s:${pages}">
+                            <a th:href="@{consulterClient(CodeClient=${CodeClient},page=${s.index},size=${size})}"
+                               th:text="${s.index}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" th:if="${client}">
+        <div class="container col s6">
+            <div class="card ">
+                <div class="card-content black-text">
+                    <span class="card-title">ajout de compte </span>
+                    <form th:action="@{saveCompte}" method="post">
+                        <div class="row">
+                            <div class="col s6">
+                                <input name="TypeCompte" type="radio" id="Epargne" value="Epargne" onclick="change1(this)"/>
+                                <label for="Epargne">Compte Epargne </label>
+                            </div>
+                            <div class="col s6">
+                                <input name="TypeCompte" type="radio" id="Courant" value="Courant" onclick="change1(this)"/>
+                                <label for="Courant">Compte Courant </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <label for="MontantDemarage">Montant de demarage </label>
+                                <input id="MontantDemarage" name="MontantDemarage" type="number" min="0" step="0.1"
+                                       class="validate"/>
+                            </div>
+                            <div id="DD" class="input-field col s6">
+                                <label for="decouvert">Decouvert</label>
+                                <input id="decouvert" name="decouvert" type="number" min="0" step="0.1"
+                                       class="validate"/>
+                            </div>
+                            <div id="TT" class="input-field col s6">
+                                <label for="taux">Taux</label>
+                                <input id="taux" name="taux" type="number" min="0" step="0.1"
+                                       class="validate"/>
+                            </div>
+                            <div>
+                                <input  name="codeClient"  th:value="${client.code}" type="hidden"
+                                       class="validate"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <button class="btn btn-primary" type="submit">save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

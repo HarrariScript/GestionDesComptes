@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="../static/css/materialize.min.css" th:href="@{css/materialize.min.css}"/>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{css/style.css}"/>
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <div class="spacing">
+
+
+        <form th:action="@{/login}" method="post">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="username" name="username" type="text" class="validate"/>
+                    <label for="username">Username</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="password" name="password" type="password" class="validate"/>
+                    <label for="password">Password</label>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <button class="btn btn-primary" type="submit">Sauthentifier</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:src="@{js/Jquery.js}"></script>
+<script th:src="@{js/materialize.js}"></script>
+<script th:src="@{js/script.js}"></script>
+</body>
+</html>
